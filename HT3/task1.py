@@ -5,7 +5,7 @@
 # The number of elements in the tuples must be different.
 
 list_of_tuples = [(1, 2, 3), (4, 5, 6, 7), (8, 9), ()]
-user_input = int(input('Enter a numer: '))
+user_input = input('Enter a number: ')
 count = 0
 for i in list_of_tuples:
     if not i:

@@ -3,6 +3,4 @@
 
 test_list = [(), ('hey'), (''), ('ma', 'ke', 'my'), [''], {}, ['d', 'a', 'y'], '', []]
 
-result = [element for element in test_list if element]
-
-print(result)
+print(list(filter(len, test_list)))

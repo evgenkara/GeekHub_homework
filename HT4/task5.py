@@ -1,26 +1,39 @@
-# Калькулятор
+# КАЛЬКУЛЯТОР
 
 
-def calculate(user_input):
-    try:
-        return eval(user_input)
-    except NameError:
-        return 'Неможливо вирішити. Перевірте правильність виразу'
+def calculate(x, y, operator):
+    operators = ('+', '-', '*', '**', '/', '%', '//')
+    if operator in operators[4:] and not y:
+        return 'На ноль делить нельзя'
+    elif operator == '+':
+        return f'{x} + {y} = {x + y}'
+    elif operator == '-':
+        return f'{x} - {y} = {x - y}'
+    elif operator == '*':
+        return f'{x} * {y} = {x * y}'
+    elif operator == '**':
+        return f'{x} ** {y} = {x ** y}'
+    elif operator == '/':
+        return f'{x} / {y} = {x / y}'
+    elif operator == '//':
+        return f'{x} // {y} = {x // y}'
+    elif operator == '%':
+        return f'{x} % {y} = {x % y}'
 
-print(50 * '#')
-print()
-print('КАЛЬКУЛЯТОР'.center(50, '-'))
-print()
-print(50 * '#')
+
 while True:
-    print('Для завершення програми введіть "Q".'.center(50, '-'))
-    user_input = input('\nВведіть вираз (наприклад 2 + 2): ')
-    print()
-    if user_input in 'QqЙй':
-        break
+    try:
+        x = float(input('Введите первый операнд: '))
+        operator = input('Введите знак операции: ')
+        y = float(input('Введите второй операнд: '))
+    except ValueError:
+        print('Проверте значение операнда')
     else:
-        print(f'Це було не складно. {user_input} = {calculate(user_input)}\n')
-        
+        print(calculate(x, y, operator))
+    exit_calc = input('Вы хотите завершить программу? (Y/N)')
+    if exit_calc in 'YyНн':
+        break
+    elif exit_calc in 'NnТт':
+        continue
 
 
-    

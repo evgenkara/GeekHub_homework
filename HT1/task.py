@@ -1,2 +1,0 @@
-print('Hometask is done')
-

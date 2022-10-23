@@ -6,9 +6,8 @@
 
 
 class LoginException(Exception):
-    def __init__(self, message=None):
-        self.message = message
-        
+    pass
+
 
 def validate_user(username, password):
     if len(username) <= 3:
@@ -17,7 +16,7 @@ def validate_user(username, password):
         raise LoginException('Username is too long')
     elif len(password) <= 8:
         raise LoginException('Password is too short')
-    elif password.isalpha() == True:
+    elif password.isalpha():
         raise LoginException('Password must contain at least one number')
     elif not any(i.isupper() for i in password):
         raise LoginException('Password must contain at least one uppercase letter')

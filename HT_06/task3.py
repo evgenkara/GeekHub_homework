@@ -17,7 +17,7 @@ def validate_user(username, password):
         raise LoginException('Username is too long')
     elif len(password) <= 8:
         raise LoginException('Password is too short')
-    elif password.isalpha() == True:
+    elif password.isalpha():
         raise LoginException('Password must contain at least one number')
     elif not any(i.isupper() for i in password):
         raise LoginException('Password must contain at least one uppercase letter')
@@ -26,9 +26,9 @@ def validate_user(username, password):
 def check_user(login, password, ex='OK'):
     try:
         validate_user(login, password)
-        print(f'Name: {login}\nPassword: {password}\nStatus: {ex}\n-----')
-    except LoginException as ex:
-        print(f'Name: {login}\nPassword: {password}\nStatus: {ex}\n-----')
+    except LoginException as err:
+        ex = err
+    print(f'Name: {login}\nPassword: {password}\nStatus: {ex}\n-----')
 
 
 users = [['user1', 'password555'], ['user2', 'Ppassword'], ['u3', 'Password777'], ['user4', 'Pass3'], ['useruser31361115146461513514894946156146441516146494', 'Password777']]

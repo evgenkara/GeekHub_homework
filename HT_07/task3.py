@@ -4,7 +4,7 @@
 
 def my_range(start, stop=None, step=1):
 
-    if not stop:
+    if stop is None:
         stop = start
         start = 0
 
@@ -18,3 +18,4 @@ print(list(my_range(-25)))
 print(list(my_range(3, 25, 3)))
 print(list(my_range(25, 1, -2)))
 print(list(my_range(25, 10)))
+print(list(my_range(10, 0, -1)))

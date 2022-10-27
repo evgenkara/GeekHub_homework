@@ -5,11 +5,11 @@
 
 
 def uniq_char_count(some_string):
-    chars = {item for item in some_string if some_string.count(item) > 1}
+    chars = {item for item in some_string if some_string.lower().count(item) > 1}
     return f'{some_string} -> {len(chars)}'
 
 
-print(uniq_char_count('dfghjk'))
-print(uniq_char_count('dsfsdrdtryfjkgk'))
+print(uniq_char_count('dDfghjk'))
+print(uniq_char_count('dsfsdrdDtryfjkgk'))
 print(uniq_char_count('bvgv5fd74igfhj45dy5'))
 print(uniq_char_count('wfekfnnjefnn778fi'))

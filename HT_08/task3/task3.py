@@ -29,6 +29,11 @@ import json
 import datetime
 
 
+red = '\033[1;31m'
+yellow = '\033[1;33m'
+green = '\033[1;32m'
+base = '\033[0m'
+
 
 def validate_user(username, password):
     user_info = [username, password]
@@ -57,7 +62,7 @@ def add_transaction(username, summa, new_sum):
 def check_balance(username):
     with open(f'{username}_balance.txt', 'r') as balance:
         currency = int(balance.readline())
-        return f'У Вас на счету: {currency}'
+        return f'{yellow}У Вас на счету: {currency}{base}'
 
 
 def replenish(username):
@@ -69,7 +74,7 @@ def replenish(username):
         with open(f'{username}_balance.txt', 'w') as balance:
             balance.write(str(new_balance))
         add_transaction(username, summa, new_balance)
-        print(f'Счет пополнен на {summa}')
+        print(f'{green}Счет пополнен на {summa}{base}')
     else:
         print('Не могу распознать купюры...')
 
@@ -84,42 +89,30 @@ def withdraw(username):
             with open(f'{username}_balance.txt', 'w') as balance:
                 balance.write(str(new_balance))
             add_transaction(username, summa, new_balance)
-            print(f'Вы сняли со счета {summa}')
+            print(f'{red}Вы сняли со счета {summa}{base}')
         else:
-            print('На Вашем счету недостаточно денег :(')
+            print(f'{red}На Вашем счету недостаточно денег :({base}')
             withdraw(username)
     else:
         print('Проверьте сумму')
 
 
-def back():
-    choose = int(input('1. На главный экран\n2. Завершить работу\n> '))
-    if choose == 1:
-        start()
-    elif choose == 2:
-        exit()
-
-
 def start():
     if validate_user(login, password):
-        action = int(input('Выберите операцию:\n1. Баланс на экран\n2. Пополнить счет\n3. Получить наличные\n4. Завершить работу\n> '))
-        if action == 1:
-            print(check_balance(login))
-            back()
-        elif action == 2:
-            replenish(login)
-            back()
-        elif action == 3:
-            withdraw(login)
-            back()
-        elif action == 4:
-            exit()
-        else:
-            print('Что-то пошло не так. Попробуйте ещё раз.\n')
-            start()
+        while True:
+            action = int(input('Выберите операцию:\n1. Баланс на экран\n2. Пополнить счет\n3. Получить наличные\n4. Завершить работу\n> '))
+            if action == 1:
+                print(check_balance(login))
+            elif action == 2:
+                replenish(login)
+            elif action == 3:
+                withdraw(login)
+            elif action == 4:
+                exit()
+            else:
+                print('Что-то пошло не так. Попробуйте ещё раз.\n')
     else:
         print('Неверный логин или пароль.')
-
 
 
 if __name__ == '__main__':

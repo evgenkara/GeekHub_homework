@@ -120,7 +120,7 @@ def withdraw_balance(summa):
 
     def map_func(x):
         a = []
-        for i in range(x[1]):
+        for _ in range(x[1]):
             a.append(x[0])
         return a
 

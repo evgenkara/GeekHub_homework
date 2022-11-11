@@ -126,7 +126,7 @@ def withdraw_balance(summa):
 
     keys = sum(list(map(map_func, load_banknotes.items())), [])
     sums = {0: 0}
-    for i in range(1, len(keys)):
+    for i in range(1, len(keys) + 1):
         value = keys[i - 1]
         new_sums = {}
         for j in sums.keys():
@@ -151,8 +151,9 @@ def withdraw_balance(summa):
     cash_bd = {}
     for i in given_banknotes:
         cash_bd[i] = given_banknotes.count(i)
-    for key, val in cash_bd.items():
-        cur.execute('UPDATE banknotes SET amount = ? WHERE banknote = ?', (val, key))
+    for item in cash_bd.items():
+        amount = load_banknotes[item[0]] - item[1]
+        cur.execute('UPDATE banknotes SET amount = ? WHERE banknote = ?', (amount, item[0]))
         con.commit()
 
     return f'Выдано купюры: {given_banknotes}'
@@ -165,18 +166,22 @@ def withdraw(username):
         atm_sum += bank[0] * bank[1]
     cur.execute('SELECT user_balance FROM balance WHERE username = ?', (username,))
     currency = cur.fetchone()[0]
-
     summa = int(input(f'Сумма наличных в банкомате: {atm_sum}\nУкажите сумму для вывода: '))
-    if summa > 0 and summa % 10 == 0:
+    while summa > atm_sum:
+        print('В банкомате недостаточно денег.')
+        print('Для выхода в главное меню нажмите 0 (ноль)')
+        summa = int(input(f'Сумма наличных в банкомате: {atm_sum}\nУкажите сумму для вывода: '))
+
+    if summa == 0:
+        return
+    elif summa > 0 and summa % 10 == 0:
+
         if summa <= currency:
             new_balance = currency - summa
             cur.execute('UPDATE balance SET user_balance = ? WHERE username = ?', (new_balance, username))
             add_transaction(username, summa, new_balance, currency)
-            try:
-                print(withdraw_balance(summa))
-            except BankException:
-                w = int(input(f'В банкомате недостаточно денег. Доступно: {atm_sum}'))
-                print(withdraw_balance(w))
+            print(withdraw_balance(summa))
+
         else:
             w = int(input('На Вашем счету недостаточно денег :(. Введите сумму меньше: '))
             print(withdraw_balance(w))
@@ -229,16 +234,21 @@ def check_banknotes():
 
 
 def change_banknotes():
-    choice = input('Выберите номинал: ')
-    cur.execute('SELECT * FROM banknotes WHERE banknote = ?', (choice,))
-    if cur.fetchone():
-        new = int(input('Новое значение: '))
-        if new >= 0:
-            cur.execute('UPDATE banknotes SET amount = ? WHERE banknote = ?', (new, choice))
+    while True:
+        print(f'В наличии: {check_banknotes()}')
+        print('Для выхода в главное меню нажмите 0 (ноль)')
+        choice = input('Выберите номинал: ')
+        if choice == '0':
+            break
+        cur.execute('SELECT * FROM banknotes WHERE banknote = ?', (choice,))
+        if cur.fetchone():
+            new = int(input('Новое значение: '))
+            if new >= 0:
+                cur.execute('UPDATE banknotes SET amount = ? WHERE banknote = ?', (new, choice))
+            else:
+                print('Значение не может быть отрицательным\n>')
         else:
-            print('Значение не может быть отрицательным\n>')
-    else:
-        print('Выберите из доступных значений (10, 20, 50, 100, 200, 500, 1000)')
+            print('Выберите из доступных значений (10, 20, 50, 100, 200, 500, 1000)')
 
     con.commit()
 
